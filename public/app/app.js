@@ -1,3 +1,5 @@
 (() => {
-  angular.module('battleship', []);
+  angular.module('battleship', [
+    'filearts.dragDrop',
+  ]);
 })();

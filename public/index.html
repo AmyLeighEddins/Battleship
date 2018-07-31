@@ -12,17 +12,21 @@
   </head>
   <body ng-controller="GameController as vm">
     <h1 class="text-center">Battleship</h1>
-    <h3 class="text-center">Opponent's board:</h3>
-    <game-board data="vm.playerBoard"></game-board>
-    <h3 class="text-center">Your board:</h3>
-    <game-board data="vm.playerBoard"></game-board>
+    <!-- <h3 class="pull-left">Rules</h3> -->
+    <ships class="shipsDock pull-right"></ships>
+    <h3 class="text-center">Opponent's Board</h3>
+    <game-board data="vm.playerBoard" type="opponent"></game-board>
+    <h3 class="text-center">Your Board</h3>
+    <game-board data="vm.playerBoard" type="player"></game-board>
     
     
     <!-- <script src="" async defer></script> -->
     <script type="text/javascript" src="../node_modules/angular/angular.min.js"></script>
     <script type="text/javascript" src="../node_modules/angular-route/angular-route.min.js"></script>
+    <script type="text/javascript" src="../node_modules/angular-drag-drop/dist/angular-drag-drop.min.js"></script>
     <script type="text/javascript" src="app/app.js"></script>
     <script type="text/javascript" src="app/controllers/game.controller.js"></script>
     <script type="text/javascript" src="app/directives/board.directive.js"></script>
+    <script type="text/javascript" src="app/directives/ships.directive.js"></script>
   </body>
 </html>
