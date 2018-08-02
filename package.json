@@ -1,17 +1,16 @@
 {
   "name": "battleship",
   "version": "1.0.0",
-  "description": "A basic battleship game written using AngularJS",
-  "main": "index.js",
+  "description": "A basic battleship game written using JavaScript and HTML",
+  "main": "index.html",
   "scripts": {
-    "test": "karma start karma.conf.js"
+    "test": ""
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AmyLeighEddins/battleship.git"
   },
   "keywords": [
-    "angularjs",
     "javascript"
   ],
   "author": "Amy Eddins",
@@ -20,33 +19,10 @@
     "url": "https://github.com/AmyLeighEddins/battleship/issues"
   },
   "homepage": "https://github.com/AmyLeighEddins/battleship#readme",
-  "dependencies": {
-    "angular": "1.6.6",
-    "angular-drag-drop": "^3.2.0",
-    "angular-mocks": "1.6.6",
-    "angular-route": "1.6.6",
-    "bootstrap": "3.3.7",
-    "express": "4.16.2",
-    "hoek": "^5.0.3",
-    "less": "^3.8.0"
-  },
-  "engine": {
-    "node": "8.6.0"
-  },
   "devDependencies": {
-    "browserify": "^14.5.0",
-    "es6-promise": "^4.1.1",
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-angular": "^3.3.0",
-    "eslint-plugin-import": "^2.12.0",
-    "jasmine-core": "^2.8.0",
-    "karma": "^2.0.5",
-    "karma-browserify": "^5.1.1",
-    "karma-chrome-launcher": "^2.2.0",
-    "karma-firefox-launcher": "^1.0.1",
-    "karma-jasmine": "^1.1.0",
-    "karma-junit-reporter": "^1.2.0",
-    "watchify": "^3.9.0"
+    "eslint-plugin-import": "^2.12.0"
   }
 }

@@ -1,7 +1,0 @@
-<table id="board" class="game-board">
-  <tr ng-repeat="array in vm.data track by $index">
-    <!-- <td id="{{vm.type}}Board{{$parent.$index * 10 + $index}}" drop-container ng-repeat="space in vm.data track by $index" ng-click="{{vm.type === 'player' ? vm.setShip($parent.$index * 10 + $index) : vm.checkIfHit()}}" on-drop="vm.dropShip($event, $dragData, $parent.$index * 10 + $index)"> -->
-    <td id="{{vm.type}}Board{{$parent.$index * 10 + $index}}" ng-repeat="space in vm.data track by $index" ng-click="{{vm.type === 'player' ? vm.setShip($parent.$index * 10 + $index) : vm.checkIfHit()}}">
-    </td>
-  </tr>
-</table>

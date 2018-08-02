@@ -8,6 +8,8 @@
   },
   "globals": {
     "app": true,
-    "angular": true
+    "angular": true,
+    "window": true,
+    "document": true
   }
 }
