@@ -1,6 +1,6 @@
 const boardSize = 10; // make boards 10x10
-let player1Board = Array(boardSize);
-let player2Board = Array(boardSize);
+const player1Board = Array(boardSize);
+const player2Board = Array(boardSize);
 let gameStatus = 'setup';
 let playerTurn = 1;
 let opponentTurn = 2;
@@ -150,11 +150,17 @@ function switchBoards() {
 /**
  * @name checkForWinCondition
  * @desc check if the hit won the game
+ * @return bool for win or not
  */
 function checkForWinCondition() {
-  return false;
+  for (let i = 0; i < boardSize; i += 1) {
+    for (let j = 0; j < boardSize; j += 1) {
+      if (opponentArray[i][j] === 'ship') return false;
+    }
+  }
   alert('WIN!');
   newGame();
+  return true;
 }
 
 /**
