@@ -1,4 +1,5 @@
 const boardSize = 10; // make boards 10x10
+const shipSize = 35;
 const player1Board = Array(boardSize);
 const player2Board = Array(boardSize);
 let gameStatus = 'setup';
@@ -7,6 +8,7 @@ let opponentTurn = 2;
 // need alternate array names since we are switching between the two players
 let playerArray = player1Board;
 let opponentArray = player2Board;
+// add constants for colors
 
 /**
  * @name setupBoards
@@ -39,6 +41,9 @@ function setupBoards() {
       // add the click function
       opponentSpaceElement.setAttribute('onclick', `checkIfHit(${i},${j})`);
       playerSpaceElement.setAttribute('onclick', `setShip(${i},${j})`);
+      // add drag and drop function calls
+      playerSpaceElement.setAttribute('ondragover', 'allowDrop(event)');
+      playerSpaceElement.setAttribute('ondrop', `drop(event, ${(i * boardSize) + j})`);
       // add the space element to the table row
       opponentRowElement.appendChild(opponentSpaceElement);
       playerRowElement.appendChild(playerSpaceElement);
@@ -185,6 +190,78 @@ function newGame() {
     }
   }
   document.getElementById('submitButton').style.display = 'block';// add back submit button
+}
+
+
+let offsetX = 0;
+let offsetY = 0;
+let shipSpaceSize = 0;
+const carrier = 5;
+const battleship = 4;
+const cruiser = 3;
+const submarine = 3;
+const destroyer = 2;
+/**
+ * @name drag
+ * @param {event} ev event object from when you pick up the ship object
+ * @param {number} size board space size of the ship
+ * @desc when you click on the ship to drag it over this is called by ondragstart
+ */
+function drag(ev, size) {
+  ev.dataTransfer.setData("ship", ev.target.id);
+  shipSpaceSize = size;
+  offsetX = ev.offsetX;
+  offsetY = ev.offsetY;
+}
+
+/**
+ * @name allowDrop
+ * @param {event} ev event object from when you are about to drop the ship
+ * @desc when you are about to drop the ship this is called by ondragover
+ */
+function allowDrop(ev) {
+  ev.preventDefault();
+}
+
+/**
+ * @name drop
+ * @param {event} ev event object from when you drop the ship on the board
+ * @param {number} index 0-99 of space on board
+ * @desc when you drop the ship this is called by ondrop
+ */
+function drop(ev, index) {
+  ev.preventDefault();
+  let data = ev.dataTransfer.getData('ship');
+  let shipLength = 0;
+  if (data === 'carrier') shipLength = carrier * shipSize;
+  if (data === 'battleship') shipLength = battleship * shipSize;
+  if (data === 'cruiser') shipLength = cruiser * shipSize;
+  if (data === 'submarine') shipLength = submarine * shipSize;
+  if (data === 'destroyer') shipLength = destroyer * shipSize;
+  const posOfCursor = Math.ceil(shipSpaceSize / (shipLength / offsetY)); // calculate the position of the cursor on the ship
+
+  // this is for adding below the cursor, for when you pick up the ship from the top
+  if (posOfCursor !== shipSpaceSize) {
+    for (let i = posOfCursor - 1; i < shipSpaceSize; i += 1) {
+      if (i <= shipSpaceSize - posOfCursor) { // working on fixing this
+        try {
+          document.getElementById(`playerBoard${index + (i * boardSize)}`).style.backgroundColor = 'grey';
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    }
+  }
+  // this is for adding above the cursor, for when you pick up the ship from the bottom
+  if (posOfCursor !== 1) {
+    for (let i = posOfCursor - 1; i >= 0; i -= 1) {
+      try {
+        document.getElementById(`playerBoard${index - (i * boardSize)}`).style.backgroundColor = 'grey';
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
 }
 
 window.onload = () => {

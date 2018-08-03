@@ -29,3 +29,56 @@ td {
   text-align: center;
 }
 
+/* clean up ships */
+.shipsDock {
+  border: 1px solid black;
+  height: 330px;
+  width: 270px;
+  margin-right: 500px;
+  margin-top: 80px;
+}
+
+.carrier {
+  height: 175px;
+  width: 30px;
+  background-color: grey;
+  margin: 10px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.battleship {
+  height: 140px;
+  width: 30px;
+  background-color: grey;
+  margin: 10px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.cruiser {
+  height: 105px;
+  width: 30px;
+  background-color: grey;
+  margin: 10px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.submarine {
+  height: 105px;
+  width: 30px;
+  background-color: grey;
+  margin: 10px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.destroyer {
+  height: 70px;
+  width: 30px;
+  background-color: grey;
+  margin: 10px;
+  display: inline-block;
+  vertical-align: top;
+}

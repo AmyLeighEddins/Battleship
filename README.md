@@ -5,15 +5,14 @@ How to run:
 
 Open the index.html file in your browser to play BattleshipJS.
 
-
 Rules:
 
-  Ships:
-    - Carrier is 5 spaces long
-    - Battleship is 4 spaces long
-    - Cruiser is 3 spaces long
-    - Submarine is 3 spaces long
-    - Destroyer is 2 spaces long
+Ships:
+  - Carrier is 5 spaces long
+  - Battleship is 4 spaces long
+  - Cruiser is 3 spaces long
+  - Submarine is 3 spaces long
+  - Destroyer is 2 spaces long
 
 1. Player 1 picks their ship placement by clicking on the spaces which turn grey for the ship color. They can be placed horizontally or vertically. Then click submit. 
 2. Player 2 does the same. Submit button goes away after the ships are setup.
