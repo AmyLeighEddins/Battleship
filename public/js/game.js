@@ -8,7 +8,21 @@ let opponentTurn = 2;
 // need alternate array names since we are switching between the two players
 let playerArray = player1Board;
 let opponentArray = player2Board;
-// add constants for colors
+let carrierRotated = false;
+let battleshipRotated = false;
+let cruiserRotated = false;
+let submarineRotated = false;
+let destroyerRotated = false;
+let shipSpaceSize = 0;
+const carrier = 5;
+const battleship = 4;
+const cruiser = 3;
+const submarine = 3;
+const destroyer = 2;
+const defaultColor = 'lightblue';
+const shipColor = 'grey';
+const missColor = 'white';
+const hitColor = 'red';
 
 /**
  * @name setupBoards
@@ -40,10 +54,10 @@ function setupBoards() {
       playerSpaceElement.setAttribute('id', `playerBoard${(i * boardSize) + j}`);
       // add the click function
       opponentSpaceElement.setAttribute('onclick', `checkIfHit(${i},${j})`);
-      playerSpaceElement.setAttribute('onclick', `setShip(${i},${j})`);
+      playerSpaceElement.setAttribute('onclick', `removeShip(${i},${j})`);
       // add drag and drop function calls
       playerSpaceElement.setAttribute('ondragover', 'allowDrop(event)');
-      playerSpaceElement.setAttribute('ondrop', `drop(event, ${(i * boardSize) + j})`);
+      playerSpaceElement.setAttribute('ondrop', `drop(event, ${(i * boardSize) + j}, ${i}, ${j})`);
       // add the space element to the table row
       opponentRowElement.appendChild(opponentSpaceElement);
       playerRowElement.appendChild(playerSpaceElement);
@@ -58,15 +72,15 @@ function setupBoards() {
  * @desc check if the click hits a ship, set the status of the space on the array, and change the color of the space depending on the status
  */
 function checkIfHit(x, y) {
-  if (gameStatus !== 'attack') return;
+  if (gameStatus !== 'attack') return false;
+  const shipType = opponentArray[x][y];
   const opponentSpaceElem = document.getElementById(`opponentBoard${(x * boardSize) + y}`);
   const playerSpaceElem = document.getElementById(`playerBoard${(x * boardSize) + y}`);
-  if (opponentArray[x][y] === 'ship') { // move was a hit
+  if (['carrier', 'battleship', 'cruiser', 'submarine', 'destroyer'].includes(opponentArray[x][y])) { // move was a hit
     opponentArray[x][y] = 'hit';
-    playerSpaceElem.style.backgroundColor = 'red';
-    opponentSpaceElem.style.backgroundColor = 'red';
-    //  add check for if the player sunk a ship
-    if (!checkForWinCondition()) { // check if the player won the game before going to the next turn
+    playerSpaceElem.style.backgroundColor = hitColor;
+    opponentSpaceElem.style.backgroundColor = hitColor;
+    if (!checkForWinCondition() && !checkIfShipSunk(shipType)) { // check if the player won the game before going to the next turn
       alert('HIT!');
       nextTurn();
     }
@@ -74,28 +88,33 @@ function checkIfHit(x, y) {
     alert('Already Taken. Try again.');
   } else { // move was a miss
     opponentArray[x][y] = 'miss';
-    opponentSpaceElem.style.backgroundColor = 'white';
+    opponentSpaceElem.style.backgroundColor = missColor;
     alert('Miss.');
     nextTurn();
   }
 }
 
 /**
- * @name setShip
- * @param {number} x first index of the associated array of space element becoming a ship
- * @param {number} y second index of the associated array of space element becoming a ship
- * @desc set the space at the index to grey for a ship space or lightblue if it was already grey to show it isn't a ship space anymore
- * and set the status of the space on the array
+ * @name removeShip
+ * @param {number} x first index of the associated array of space element
+ * @param {number} y second index of the associated array of space element
+ * @desc set the space at the index to light blue for a ship space to show it isn't a ship space anymore
+ * and set the status of the space on the array and put the ship back in the dock
  */
-function setShip(x, y) {
-  if (gameStatus !== 'setup') return;
-  const spaceElem = document.getElementById(`playerBoard${(x * boardSize) + y}`);
-  if (spaceElem.style.backgroundColor === 'grey') {
-    spaceElem.style.backgroundColor = 'lightblue';
-    playerArray[x][y] = 'false';
-  } else {
-    spaceElem.style.backgroundColor = 'grey';
-    playerArray[x][y] = 'ship';
+function removeShip(x, y) {
+  if (gameStatus !== 'setup') return false;
+  const shipRemoving = `${playerArray[x][y]}`;
+  if (['carrier', 'battleship', 'cruiser', 'submarine', 'destroyer'].includes(playerArray[x][y])) {
+    for (let i = 0; i < boardSize; i += 1) {
+      for (let j = 0; j < boardSize; j += 1) {
+        if (playerArray[i][j] === shipRemoving) {
+          const spaceElem = document.getElementById(`playerBoard${(i * boardSize) + j}`);
+          spaceElem.style.backgroundColor = defaultColor;
+          document.getElementById(`${playerArray[i][j]}`).style.display = 'inline-block';
+          playerArray[i][j] = 'false';
+        }
+      }
+    }
   }
 }
 
@@ -104,14 +123,27 @@ function setShip(x, y) {
  * @desc submit your placement of ships
  */
 function submitShips() {
-  // add check if ships are correct
-  gameStatus = playerTurn === 1 ? 'setup' : 'attack'; // change the game status to attack if it was player 2 who just submitted their ships
-  playerTurn = playerTurn === 1 ? 2 : 1; // switch whose turn it is
-  opponentTurn = opponentTurn === 2 ? 1 : 2; // switch whose turn it is to be the opponent
-  if (gameStatus === 'attack') {
-    document.getElementById('submitButton').style.display = 'none'; // no submit button for attack turns
+  if (document.getElementById('carrier').style.display === 'none' &&
+  document.getElementById('battleship').style.display === 'none' &&
+  document.getElementById('cruiser').style.display === 'none' &&
+  document.getElementById('submarine').style.display === 'none' &&
+  document.getElementById('destroyer').style.display === 'none') {
+    gameStatus = playerTurn === 1 ? 'setup' : 'attack'; // change the game status to attack if it was player 2 who just submitted their ships
+    playerTurn = playerTurn === 1 ? 2 : 1; // switch whose turn it is
+    opponentTurn = opponentTurn === 2 ? 1 : 2; // switch whose turn it is to be the opponent
+    if (gameStatus === 'attack') {
+      document.getElementById('submitButton').style.display = 'none'; // no submit button for attack turns
+    }
+    document.getElementById('carrier').style.display = 'inline-block';
+    document.getElementById('battleship').style.display = 'inline-block';
+    document.getElementById('cruiser').style.display = 'inline-block';
+    document.getElementById('submarine').style.display = 'inline-block';
+    document.getElementById('destroyer').style.display = 'inline-block';
+    switchBoards();
+  } else {
+    alert('You have not placed all your ships.');
+    return false;
   }
-  switchBoards();
 }
 
 /**
@@ -142,14 +174,29 @@ function switchBoards() {
     for (let j = 0; j < boardSize; j += 1) {
       const playerSpaceElem = document.getElementById(`playerBoard${(i * boardSize) + j}`);
       const opponentSpaceElem = document.getElementById(`opponentBoard${(i * boardSize) + j}`);
-      if (playerArray[i][j] === 'hit') playerSpaceElem.style.backgroundColor = 'red';
-      else if (playerArray[i][j] === 'ship') playerSpaceElem.style.backgroundColor = 'grey';
-      else playerSpaceElem.style.backgroundColor = 'lightblue';
-      if (opponentArray[i][j] === 'hit') opponentSpaceElem.style.backgroundColor = 'red';
-      else if (opponentArray[i][j] === 'miss') opponentSpaceElem.style.backgroundColor = 'white';
-      else opponentSpaceElem.style.backgroundColor = 'lightblue';
+      if (playerArray[i][j] === 'hit') playerSpaceElem.style.backgroundColor = hitColor;
+      else if (['carrier', 'battleship', 'cruiser', 'submarine', 'destroyer'].includes(playerArray[i][j])) playerSpaceElem.style.backgroundColor = shipColor;
+      else playerSpaceElem.style.backgroundColor = defaultColor;
+      if (opponentArray[i][j] === 'hit') opponentSpaceElem.style.backgroundColor = hitColor;
+      else if (opponentArray[i][j] === 'miss') opponentSpaceElem.style.backgroundColor = missColor;
+      else opponentSpaceElem.style.backgroundColor = defaultColor;
     }
   }
+}
+
+/**
+ * @name checkIfShipSunk
+ * @param {string} ship 
+ * @desc check if the player sunk a ship
+ */
+function checkIfShipSunk(ship) {
+  for (let i = 0; i < boardSize; i += 1) {
+    for (let j = 0; j < boardSize; j += 1) {
+      if (opponentArray[i][j] === ship) return false;
+    }
+  }
+  alert(`You sunk their ${ship}.`);
+  return true;
 }
 
 /**
@@ -160,7 +207,7 @@ function switchBoards() {
 function checkForWinCondition() {
   for (let i = 0; i < boardSize; i += 1) {
     for (let j = 0; j < boardSize; j += 1) {
-      if (opponentArray[i][j] === 'ship') return false;
+      if (['carrier', 'battleship', 'cruiser', 'submarine', 'destroyer'].includes(opponentArray[i][j])) return false;
     }
   }
   alert('WIN!');
@@ -183,24 +230,31 @@ function newGame() {
     for (let j = 0; j < boardSize; j += 1) {
       const playerSpaceElem = document.getElementById(`playerBoard${(i * boardSize) + j}`);
       const opponentSpaceElem = document.getElementById(`opponentBoard${(i * boardSize) + j}`);
-      playerSpaceElem.style.backgroundColor = 'lightblue';
-      opponentSpaceElem.style.backgroundColor = 'lightblue';
+      playerSpaceElem.style.backgroundColor = defaultColor;
+      opponentSpaceElem.style.backgroundColor = defaultColor;
       player2Board[i][j] = 'false';
       player1Board[i][j] = 'false';
     }
   }
   document.getElementById('submitButton').style.display = 'block';// add back submit button
+  // add back ships
+  document.getElementById('carrier').style.display = 'inline-block';
+  document.getElementById('battleship').style.display = 'inline-block';
+  document.getElementById('cruiser').style.display = 'inline-block';
+  document.getElementById('submarine').style.display = 'inline-block';
+  document.getElementById('destroyer').style.display = 'inline-block';
 }
 
+/**
+ * @name rotateShip
+ * @param {string} ship 
+ * @desc rotate the ship 90 deg and set the rotate boolean
+ */
+function rotateShip(ship) {
+  eval(`${ship}Rotated = !${ship}Rotated`);
+  document.getElementById(ship).style.transform = eval(`${ship}Rotated`) ? 'rotate(90deg)' : 'rotate(0deg)';
+}
 
-let offsetX = 0;
-let offsetY = 0;
-let shipSpaceSize = 0;
-const carrier = 5;
-const battleship = 4;
-const cruiser = 3;
-const submarine = 3;
-const destroyer = 2;
 /**
  * @name drag
  * @param {event} ev event object from when you pick up the ship object
@@ -208,10 +262,10 @@ const destroyer = 2;
  * @desc when you click on the ship to drag it over this is called by ondragstart
  */
 function drag(ev, size) {
-  ev.dataTransfer.setData("ship", ev.target.id);
-  shipSpaceSize = size;
-  offsetX = ev.offsetX;
-  offsetY = ev.offsetY;
+  ev.dataTransfer.setData('ship', ev.target.id); // save ship type
+  ev.dataTransfer.setData('offsetY', ev.offsetY); // get offset so we know where mouse is vertically on ship
+  shipSpaceSize = size; // get how big ship is
+  // offsetY = ev.offsetY; // get offset so we know where mouse is vertically on ship
 }
 
 /**
@@ -229,41 +283,68 @@ function allowDrop(ev) {
  * @param {number} index 0-99 of space on board
  * @desc when you drop the ship this is called by ondrop
  */
-function drop(ev, index) {
+function drop(ev, index, x, y) {
   ev.preventDefault();
-  let data = ev.dataTransfer.getData('ship');
+  const shipType = ev.dataTransfer.getData('ship');
+  const offsetY = ev.dataTransfer.getData('offsetY');
+  // Calculate ship length in px
   let shipLength = 0;
-  if (data === 'carrier') shipLength = carrier * shipSize;
-  if (data === 'battleship') shipLength = battleship * shipSize;
-  if (data === 'cruiser') shipLength = cruiser * shipSize;
-  if (data === 'submarine') shipLength = submarine * shipSize;
-  if (data === 'destroyer') shipLength = destroyer * shipSize;
+  if (shipType === 'carrier') shipLength = carrier * shipSize;
+  if (shipType === 'battleship') shipLength = battleship * shipSize;
+  if (shipType === 'cruiser') shipLength = cruiser * shipSize;
+  if (shipType === 'submarine') shipLength = submarine * shipSize;
+  if (shipType === 'destroyer') shipLength = destroyer * shipSize;
   const posOfCursor = Math.ceil(shipSpaceSize / (shipLength / offsetY)); // calculate the position of the cursor on the ship
-
-  // this is for adding below the cursor, for when you pick up the ship from the top
-  if (posOfCursor !== shipSpaceSize) {
-    for (let i = posOfCursor - 1; i < shipSpaceSize; i += 1) {
-      if (i <= shipSpaceSize - posOfCursor) { // working on fixing this
-        try {
-          document.getElementById(`playerBoard${index + (i * boardSize)}`).style.backgroundColor = 'grey';
-        } catch (error) {
-          console.error(error);
+  const indexOfBottomOfShip = index + ((shipSpaceSize - posOfCursor) * boardSize); // get the index of the bottom of the ship
+  // loop through a fill in ship spaces
+  if (!eval(`${shipType}Rotated`)) { // loop for when ship is vertical
+    for (let i = shipSpaceSize - 1; i >= 0; i -= 1) {
+      try {
+        document.getElementById(`playerBoard${indexOfBottomOfShip - (i * boardSize)}`).style.backgroundColor = shipColor;
+        playerArray[x + i][y] = `${shipType}`;
+      } catch (error) { // if there is an error remove all ship spaces just created
+        alert('You cannot place your ship there. Try again.');
+        for (let j = shipSpaceSize - 1; j >= 0; j -= 1) {
+          try {
+            document.getElementById(`playerBoard${indexOfBottomOfShip - (j * boardSize)}`).style.backgroundColor = defaultColor;
+            playerArray[x + j][y] = 'false';
+          } catch (error) {
+            return false;
+          }
+        }
+      }
+    }
+  } else { // loop for when ship is horizontal
+    const row = Math.floor(indexOfBottomOfShip / 10); // save what row ship is on
+    for (let i = shipSpaceSize - 1; i >= 0; i -= 1) {
+      try {
+        if (Math.floor((indexOfBottomOfShip + i) / 10) !== row) { // make sure part of ship is not put on next row
+          alert('You cannot place your ship there. Try again.');
+          return false;
+        }
+        document.getElementById(`playerBoard${indexOfBottomOfShip + i}`).style.backgroundColor = shipColor;
+        playerArray[x][y + i] = `${shipType}`;
+      } catch (error) { // if there is an error remove all ship spaces just created
+        alert('You cannot place your ship there. Try again.');
+        for (let j = shipSpaceSize - 1; j >= 0; j -= 1) {
+          try {
+            document.getElementById(`playerBoard${indexOfBottomOfShip + j}`).style.backgroundColor = defaultColor;
+            playerArray[x][y + j] = 'false';
+          } catch (error) {
+            return false;
+          }
         }
       }
     }
   }
-  // this is for adding above the cursor, for when you pick up the ship from the bottom
-  if (posOfCursor !== 1) {
-    for (let i = posOfCursor - 1; i >= 0; i -= 1) {
-      try {
-        document.getElementById(`playerBoard${index - (i * boardSize)}`).style.backgroundColor = 'grey';
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  }
+
+  document.getElementById(shipType).style.display = 'none'; // remove the ship from the dock
 }
 
+/**
+ * @name onload
+ * @desc on loading the page setup boards
+ */
 window.onload = () => {
   setupBoards();
 };

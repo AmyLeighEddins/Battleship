@@ -34,8 +34,9 @@ td {
   border: 1px solid black;
   height: 330px;
   width: 270px;
-  margin-right: 500px;
-  margin-top: 80px;
+  /* margin-right: 500px; */
+  /* margin-top: 80px; */
+  float: right;
 }
 
 .carrier {

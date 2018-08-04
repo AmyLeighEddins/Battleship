@@ -15,20 +15,22 @@
     <h3 class="text-center">Opponent's Board</h3>
     <table id="opponentBoard" class="game-board"></table>
     <h3 class="text-center">Your Board</h3>
-    <table id="playerBoard" class="game-board"></table>  
+    <div>
+      <table id="playerBoard" class="game-board"></table> 
+      <div class="shipsDock">
+        <h3 class="text-center">Ships</h3>
+        <div id="carrier" class="carrier" draggable="true" ondragstart="drag(event, 5)" onclick="rotateShip('carrier')"></div>
+        <div id="battleship" class="battleship" draggable="true" ondragstart="drag(event, 4)" onclick="rotateShip('battleship')"></div>
+        <div id="cruiser" class="cruiser" draggable="true" ondragstart="drag(event, 3)" onclick="rotateShip('cruiser')"></div>
+        <div id="submarine" class="submarine" draggable="true" ondragstart="drag(event, 3)" onclick="rotateShip('submarine')"></div>
+        <div id="destroyer" class="destroyer" draggable="true" ondragstart="drag(event, 2)" onclick="rotateShip('destroyer')"></div>
+        <div id="submitButton" class="text-center">
+          <button class="submit-button" onclick="submitShips()">Submit</button>
+        </div>
+      </div>
+    </div>  
     <div id="newGameButton" class="text-center">
       <button class="new-game-button" onclick="newGame()">New Game</button>
-    </div>
-    <div id="submitButton" class="text-center">
-      <button class="submit-button" onclick="submitShips()">Submit</button>
-    </div>
-    <h3 class="text-center">Ships</h3>
-    <div>
-      <div id="carrier" class="carrier" draggable="true" ondragstart="drag(event, 5)" ></div>
-      <div id="battleship" class="battleship" draggable="true" ondragstart="drag(event, 4)" ></div>
-      <div id="cruiser" class="cruiser" draggable="true" ondragstart="drag(event, 3)" ></div>
-      <div id="submarine" class="submarine" draggable="true" ondragstart="drag(event, 3)" ></div>
-      <div id="destroyer" class="destroyer" draggable="true" ondragstart="drag(event, 2)" ></div>
     </div>
   </body>
 </html>
