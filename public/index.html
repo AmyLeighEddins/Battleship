@@ -7,17 +7,28 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="styles/styles.css">
+    <script type="text/javascript" src="js/config.js"></script>
     <script type="text/javascript" src="js/game.js"></script>
+    <script type="text/javascript" src="js/config.js"></script>
+    <script type="text/javascript" src="js/boards.js"></script>
+    <script type="text/javascript" src="js/ships.js"></script>
   </head>
   <body>
-    <h1 class="text-center">Battleship</h1>
-    <!-- <h3 class="pull-left">Rules</h3> -->
-    <h3 class="text-center">Opponent's Board</h3>
+    <h1 class="text-center">BattleShipt</h1>
+    <h2 id="playersTurn" class="text-center">Player 1's Turn</h2>
+    <div id="newGameButton" class="text-center">
+      <button class="new-game-button" onclick="newGame()">New Game</button>
+    </div>
+    <h3 class="player-text">Opponent's Board</h3>
     <table id="opponentBoard" class="game-board"></table>
-    <h3 class="text-center">Your Board</h3>
-    <div>
+    <!-- <div class="rulesArea">
+      <h3>Rules</h3>
+      <h5></h5>
+    </div> -->
+    <h3 class="opponent-text">Your Board</h3>
+    <div class="playerArea">
       <table id="playerBoard" class="game-board"></table> 
-      <div class="shipsDock">
+      <div id="shipsDock" class="shipsDock">
         <h3 class="text-center">Ships</h3>
         <div id="carrier" class="carrier" draggable="true" ondragstart="drag(event, 5)" onclick="rotateShip('carrier')"></div>
         <div id="battleship" class="battleship" draggable="true" ondragstart="drag(event, 4)" onclick="rotateShip('battleship')"></div>
@@ -29,8 +40,6 @@
         </div>
       </div>
     </div>  
-    <div id="newGameButton" class="text-center">
-      <button class="new-game-button" onclick="newGame()">New Game</button>
-    </div>
+    
   </body>
 </html>

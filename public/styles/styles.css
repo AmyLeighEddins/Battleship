@@ -1,7 +1,8 @@
 .game-board {
   border: 1px solid black;
-  margin-left: auto; 
-  margin-right: auto;
+  margin-left: 300px; 
+  display: inline-block;
+  min-width: 362px;
 }
 
 .submit-button {
@@ -12,9 +13,9 @@
 }
 
 .new-game-button {
-  margin: 10px;
+  margin: 5px;
   border-radius: 8px;
-  font-size: 16px;
+  font-size: 14px;
   padding: 5px;
 }
 
@@ -29,54 +30,53 @@ td {
   text-align: center;
 }
 
-/* clean up ships */
+.player-text {
+  margin-left: 400px;
+}
+
+.opponent-text {
+  margin-left: 430px;
+}
+
+.playerArea {
+  display: inline-block;
+}
+
+/* .rulesArea {
+  float: right;
+  margin-right: 450px;
+} */
+
 .shipsDock {
   border: 1px solid black;
   height: 330px;
   width: 270px;
-  /* margin-right: 500px; */
-  /* margin-top: 80px; */
   float: right;
+  margin-left: 300px;
+  margin-top: 15px;
 }
 
 .carrier {
   height: 175px;
-  width: 30px;
-  background-color: grey;
-  margin: 10px;
-  display: inline-block;
-  vertical-align: top;
 }
 
 .battleship {
   height: 140px;
-  width: 30px;
-  background-color: grey;
-  margin: 10px;
-  display: inline-block;
-  vertical-align: top;
 }
 
 .cruiser {
   height: 105px;
-  width: 30px;
-  background-color: grey;
-  margin: 10px;
-  display: inline-block;
-  vertical-align: top;
 }
 
 .submarine {
   height: 105px;
-  width: 30px;
-  background-color: grey;
-  margin: 10px;
-  display: inline-block;
-  vertical-align: top;
 }
 
 .destroyer {
   height: 70px;
+}
+
+.carrier, .battleship, .cruiser, .submarine, .destroyer {
   width: 30px;
   background-color: grey;
   margin: 10px;
