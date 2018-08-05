@@ -30,11 +30,11 @@
       <table id="playerBoard" class="game-board"></table> 
       <div id="shipsDock" class="shipsDock">
         <h3 class="text-center">Ships</h3>
-        <div id="carrier" class="carrier" draggable="true" ondragstart="drag(event, 5)" onclick="rotateShip('carrier')"></div>
-        <div id="battleship" class="battleship" draggable="true" ondragstart="drag(event, 4)" onclick="rotateShip('battleship')"></div>
-        <div id="cruiser" class="cruiser" draggable="true" ondragstart="drag(event, 3)" onclick="rotateShip('cruiser')"></div>
-        <div id="submarine" class="submarine" draggable="true" ondragstart="drag(event, 3)" onclick="rotateShip('submarine')"></div>
-        <div id="destroyer" class="destroyer" draggable="true" ondragstart="drag(event, 2)" onclick="rotateShip('destroyer')"></div>
+        <div id="carrier" class="carrier" draggable="true" ondragstart="drag(event)" onclick="rotateShip('carrier')"></div>
+        <div id="battleship" class="battleship" draggable="true" ondragstart="drag(event)" onclick="rotateShip('battleship')"></div>
+        <div id="cruiser" class="cruiser" draggable="true" ondragstart="drag(event)" onclick="rotateShip('cruiser')"></div>
+        <div id="submarine" class="submarine" draggable="true" ondragstart="drag(event)" onclick="rotateShip('submarine')"></div>
+        <div id="destroyer" class="destroyer" draggable="true" ondragstart="drag(event)" onclick="rotateShip('destroyer')"></div>
         <div id="submitButton" class="text-center">
           <button class="submit-button" onclick="submitShips()">Submit</button>
         </div>

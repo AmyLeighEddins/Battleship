@@ -8,8 +8,8 @@ window.setupBoards = function setupBoards() {
   const playerBoardElement = document.getElementById('playerBoard');
   for (let i = 0; i < window.boardSize; i += 1) { // loop through double array to create array and create td elements to create table
     // board will be 10x10
-    player2Board[i] = Array(window.boardSize);
-    player1Board[i] = Array(window.boardSize);
+    window.player2Board[i] = Array(window.boardSize);
+    window.player1Board[i] = Array(window.boardSize);
     // create row element so it creates a new row every 10 spaces
     const opponentRowElement = document.createElement('tr');
     const playerRowElement = document.createElement('tr');
@@ -18,8 +18,8 @@ window.setupBoards = function setupBoards() {
     playerBoardElement.appendChild(playerRowElement);
     for (let j = 0; j < window.boardSize; j += 1) {
       // set them all to the string false since we'll have more statuses than true and false
-      player2Board[i][j] = 'false';
-      player1Board[i][j] = 'false';
+      window.player2Board[i][j] = 'false';
+      window.player1Board[i][j] = 'false';
       // create table data element (space)
       const opponentSpaceElement = document.createElement('td');
       const playerSpaceElement = document.createElement('td');
@@ -50,7 +50,7 @@ window.checkIfHit = function checkIfHit(x, y) {
   const shipType = window.opponentArray[x][y];
   const opponentSpaceElem = document.getElementById(`opponentBoard${(x * window.boardSize) + y}`);
   const playerSpaceElem = document.getElementById(`playerBoard${(x * window.boardSize) + y}`);
-  if (['carrier', 'battleship', 'cruiser', 'submarine', 'destroyer'].includes(window.opponentArray[x][y])) { // move was a hit
+  if (window.shipArray.includes(window.opponentArray[x][y])) { // move was a hit
     window.opponentArray[x][y] = 'hit';
     playerSpaceElem.style.backgroundColor = window.hitColor;
     opponentSpaceElem.style.backgroundColor = window.hitColor;
@@ -74,7 +74,7 @@ window.checkIfHit = function checkIfHit(x, y) {
  */
 window.switchBoards = function switchBoards() {
   // switch which array we use
-  if (window.playerTurn === 1) {
+  if (window.playerTurn === window.player1) {
     window.playerArray = window.player1Board;
     window.opponentArray = window.player2Board;
   } else {
@@ -88,7 +88,7 @@ window.switchBoards = function switchBoards() {
       const opponentSpaceElem = document.getElementById(`opponentBoard${(i * window.boardSize) + j}`);
       if (window.playerArray[i][j] === 'hit') playerSpaceElem.style.backgroundColor = window.hitColor;
       else if (window.playerArray[i][j] === 'miss') playerSpaceElem.style.backgroundColor = window.missColor;
-      else if (['carrier', 'battleship', 'cruiser', 'submarine', 'destroyer'].includes(window.playerArray[i][j])) playerSpaceElem.style.backgroundColor = window.shipColor;
+      else if (window.shipArray.includes(window.playerArray[i][j])) playerSpaceElem.style.backgroundColor = window.shipColor;
       else playerSpaceElem.style.backgroundColor = window.defaultColor;
       if (window.opponentArray[i][j] === 'hit') opponentSpaceElem.style.backgroundColor = window.hitColor;
       else if (window.opponentArray[i][j] === 'miss') opponentSpaceElem.style.backgroundColor = window.missColor;
@@ -121,7 +121,7 @@ window.checkIfShipSunk = function checkIfShipSunk(ship) {
 window.checkForWinCondition = function checkForWinCondition() {
   for (let i = 0; i < window.boardSize; i += 1) {
     for (let j = 0; j < window.boardSize; j += 1) {
-      if (['carrier', 'battleship', 'cruiser', 'submarine', 'destroyer'].includes(window.opponentArray[i][j])) return false;
+      if (window.shipArray.includes(window.opponentArray[i][j])) return false;
     }
   }
   alert('WIN!');

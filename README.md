@@ -3,7 +3,7 @@ Battleship game using JavaScript
 
 How to run:
 
-Open the index.html file in your browser to play BattleshipJS.
+Open the index.html file in your browser to play BattleShipt.
 
 Rules:
 
