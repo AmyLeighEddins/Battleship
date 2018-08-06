@@ -18,8 +18,8 @@ window.setupBoards = function setupBoards() {
     playerBoardElement.appendChild(playerRowElement);
     for (let j = 0; j < window.boardSize; j += 1) {
       // set them all to the string false since we'll have more statuses than true and false
-      window.player2Board[i][j] = 'false';
-      window.player1Board[i][j] = 'false';
+      window.player2Board[i][j] = window.defaultStatus;
+      window.player1Board[i][j] = window.defaultStatus;
       // create table data element (space)
       const opponentSpaceElement = document.createElement('td');
       const playerSpaceElement = document.createElement('td');
@@ -46,22 +46,22 @@ window.setupBoards = function setupBoards() {
  * @desc check if the click hits a ship, set the status of the space on the array, and change the color of the space depending on the status
  */
 window.checkIfHit = function checkIfHit(x, y) {
-  if (window.gameStatus !== 'attack') return false;
+  if (window.gameStatus !== window.attackStatus) return false;
   const shipType = window.opponentArray[x][y];
   const opponentSpaceElem = document.getElementById(`opponentBoard${(x * window.boardSize) + y}`);
   const playerSpaceElem = document.getElementById(`playerBoard${(x * window.boardSize) + y}`);
   if (window.shipArray.includes(window.opponentArray[x][y])) { // move was a hit
-    window.opponentArray[x][y] = 'hit';
+    window.opponentArray[x][y] = window.hitStatus;
     playerSpaceElem.style.backgroundColor = window.hitColor;
     opponentSpaceElem.style.backgroundColor = window.hitColor;
     if (!window.checkForWinCondition() && !window.checkIfShipSunk(shipType)) { // check if the player won the game before going to the next turn
-      alert('HIT!');
+      alert('Hit!');
       window.nextTurn();
     }
-  } else if (window.opponentArray[x][y] === 'miss' || window.opponentArray[x][y] === 'hit') { // move has already been tried
+  } else if (window.opponentArray[x][y] === window.missStatus || window.opponentArray[x][y] === window.hitStatus) { // move has already been tried
     alert('Already Taken. Try again.');
   } else { // move was a miss
-    window.opponentArray[x][y] = 'miss';
+    window.opponentArray[x][y] = window.missStatus;
     opponentSpaceElem.style.backgroundColor = window.missColor;
     alert('Miss.');
     window.nextTurn();
@@ -86,12 +86,12 @@ window.switchBoards = function switchBoards() {
     for (let j = 0; j < window.boardSize; j += 1) {
       const playerSpaceElem = document.getElementById(`playerBoard${(i * window.boardSize) + j}`);
       const opponentSpaceElem = document.getElementById(`opponentBoard${(i * window.boardSize) + j}`);
-      if (window.playerArray[i][j] === 'hit') playerSpaceElem.style.backgroundColor = window.hitColor;
-      else if (window.playerArray[i][j] === 'miss') playerSpaceElem.style.backgroundColor = window.missColor;
+      if (window.playerArray[i][j] === window.hitStatus) playerSpaceElem.style.backgroundColor = window.hitColor;
+      else if (window.playerArray[i][j] === window.missStatus) playerSpaceElem.style.backgroundColor = window.missColor;
       else if (window.shipArray.includes(window.playerArray[i][j])) playerSpaceElem.style.backgroundColor = window.shipColor;
       else playerSpaceElem.style.backgroundColor = window.defaultColor;
-      if (window.opponentArray[i][j] === 'hit') opponentSpaceElem.style.backgroundColor = window.hitColor;
-      else if (window.opponentArray[i][j] === 'miss') opponentSpaceElem.style.backgroundColor = window.missColor;
+      if (window.opponentArray[i][j] === window.hitStatus) opponentSpaceElem.style.backgroundColor = window.hitColor;
+      else if (window.opponentArray[i][j] === window.missStatus) opponentSpaceElem.style.backgroundColor = window.missColor;
       else opponentSpaceElem.style.backgroundColor = window.defaultColor;
     }
   }
@@ -124,7 +124,7 @@ window.checkForWinCondition = function checkForWinCondition() {
       if (window.shipArray.includes(window.opponentArray[i][j])) return false;
     }
   }
-  alert('WIN!');
+  alert(`Player ${window.playerTurn} wins!`);
   window.newGame();
   return true;
 };

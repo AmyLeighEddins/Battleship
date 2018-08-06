@@ -6,20 +6,20 @@
  * and set the status of the space on the array and put the ship back in the dock
  */
 window.removeShip = function removeShip(x, y) {
-  if (window.gameStatus !== 'setup') return false;
-  const shipRemoving = `${window.playerArray[x][y]}`;
-  if (window.shipArray.includes(window.playerArray[x][y])) {
+  if (window.gameStatus !== window.setupStatus) return false;
+  const shipRemoving = window.playerArray[x][y];
+  if (window.shipArray.includes(shipRemoving)) {
     for (let i = 0; i < window.boardSize; i += 1) {
       for (let j = 0; j < window.boardSize; j += 1) {
         if (window.playerArray[i][j] === shipRemoving) {
           const spaceElem = document.getElementById(`playerBoard${(i * window.boardSize) + j}`);
           spaceElem.style.backgroundColor = window.defaultColor;
-          document.getElementById(`${window.playerArray[i][j]}`).style.display = window.inlineBlock;
-          window.playerArray[i][j] = 'false';
+          window.playerArray[i][j] = window.defaultStatus;
         }
       }
     }
   }
+  window.normalizeShip(window.shipsData[shipRemoving].name);
   return true;
 };
 
@@ -29,17 +29,16 @@ window.removeShip = function removeShip(x, y) {
  */
 window.submitShips = function submitShips() {
   if (window.areAllShipsUsed()) {
-    window.gameStatus = window.playerTurn === window.player1 ? 'setup' : 'attack'; // change the game status to attack if it was player 2 who just submitted their ships
+    window.gameStatus = window.playerTurn === window.player1 ? window.setupStatus : window.attackStatus; // change the game status to attack if it was player 2 who just submitted their ships
     window.playerTurn = window.playerTurn === window.player1 ? window.player2 : window.player1; // switch whose turn it is
-    const playerTurnString = window.playerTurn === window.player1 ? window.player1Turn : window.player2Turn;
-    document.getElementById('playersTurn').textContent = playerTurnString;
-    alert(playerTurnString);
-    if (window.gameStatus === 'attack') {
-      document.getElementById('submitButton').style.display = window.noDisplay; // no submit button for attack turns
-      document.getElementById('shipsDock').style.display = window.noDisplay; // take away whole dock
+    document.getElementById(window.turnId).textContent = `Player ${window.playerTurn}'s Turn`;
+    alert(`Player ${window.playerTurn}'s Turn`);
+    if (window.gameStatus === window.attackStatus) {
+      document.getElementById(window.submitButtonId).style.display = window.noDisplay; // no submit button for attack turns
+      document.getElementById(window.shipDockId).style.display = window.noDisplay; // take away whole dock
     } else {
       window.shipArray.forEach((ship) => {
-        window.normalizeShip(window.shipsDataArray[ship].name);
+        window.normalizeShip(window.shipsData[ship].name);
       });
     }
     window.switchBoards();
@@ -55,8 +54,8 @@ window.submitShips = function submitShips() {
  * @desc rotate the ship 90 deg and set the rotate boolean
  */
 window.rotateShip = function rotateShip(ship) {
-  window.shipsDataArray[ship].rotated = !window.shipsDataArray[ship].rotated;
-  document.getElementById(ship).style.transform = window.shipsDataArray[ship].rotated ? 'rotate(90deg)' : 'rotate(0deg)';
+  window.shipsData[ship].rotated = !window.shipsData[ship].rotated;
+  document.getElementById(ship).style.transform = window.shipsData[ship].rotated ? 'rotate(90deg)' : 'rotate(0deg)';
 };
 
 /**
@@ -66,7 +65,7 @@ window.rotateShip = function rotateShip(ship) {
 window.areAllShipsUsed = function areAllShipsUsed() {
   let allUsed = true;
   window.shipArray.forEach((ship) => {
-    if (window.shipsDataArray[ship].isDisplayed) allUsed = false;
+    if (window.shipsData[ship].isDisplayed) allUsed = false;
   });
   return allUsed;
 };
@@ -76,8 +75,8 @@ window.areAllShipsUsed = function areAllShipsUsed() {
  * @desc set ships back to normal position
  */
 window.normalizeShip = function normalizeShip(ship) {
-  if (window.shipsDataArray[ship].rotated) document.getElementById(ship).style.transform = 'rotate(0deg)'; // normal rotation (vertical)
-  window.shipsDataArray[ship].rotated = false; // set rotated to false
+  if (window.shipsData[ship].rotated) document.getElementById(ship).style.transform = 'rotate(0deg)'; // normal rotation (vertical)
+  window.shipsData[ship].rotated = false; // set rotated to false
   document.getElementById(ship).style.display = window.inlineBlock; // add back ships
 };
 
@@ -111,11 +110,11 @@ window.drop = function drop(ev, index, x, y) {
   ev.preventDefault();
   const shipType = ev.dataTransfer.getData('ship');
   const offsetY = ev.dataTransfer.getData('offsetY');
-  const posOfCursor = Math.ceil(window.shipsDataArray[shipType].length / (window.shipsDataArray[shipType].pixels / offsetY)); // calculate the position of the cursor on the ship
+  const posOfCursor = Math.ceil(window.shipsData[shipType].length / (window.shipsData[shipType].pixels / offsetY)); // calculate the position of the cursor on the ship
   // loop through a fill in ship spaces
-  if (!window.shipsDataArray[shipType].rotated) { // loop for when ship is vertical
-    const indexOfBottomOfShip = index + ((window.shipsDataArray[shipType].length - posOfCursor) * window.boardSize); // get the index of the bottom of the ship
-    for (let i = window.shipsDataArray[shipType].length - 1; i >= 0; i -= 1) {
+  if (!window.shipsData[shipType].rotated) { // loop for when ship is vertical
+    const indexOfBottomOfShip = index + ((window.shipsData[shipType].length - posOfCursor) * window.boardSize); // get the index of the bottom of the ship
+    for (let i = window.shipsData[shipType].length - 1; i >= 0; i -= 1) {
       let spaceIndex = indexOfBottomOfShip - (i * window.boardSize);
       let xPos = Math.floor(spaceIndex / window.boardSize);
       try {
@@ -123,12 +122,12 @@ window.drop = function drop(ev, index, x, y) {
         window.playerArray[xPos][y] = `${shipType}`;
       } catch (error) { // if there is an error remove all ship spaces just created
         alert('You cannot place your ship there. Try again.');
-        for (let j = window.shipsDataArray[shipType].length - 1; j >= 0; j -= 1) {
+        for (let j = window.shipsData[shipType].length - 1; j >= 0; j -= 1) {
           try {
             spaceIndex = indexOfBottomOfShip - (j * window.boardSize);
             xPos = Math.floor(spaceIndex / window.boardSize);
             document.getElementById(`playerBoard${spaceIndex}`).style.backgroundColor = window.defaultColor;
-            window.playerArray[xPos][y] = 'false';
+            window.playerArray[xPos][y] = window.defaultStatus;
           } catch (error2) {
             return false;
           }
@@ -136,9 +135,9 @@ window.drop = function drop(ev, index, x, y) {
       }
     }
   } else { // loop for when ship is horizontal
-    const indexOfLeftOfShip = index - ((window.shipsDataArray[shipType].length - posOfCursor)); // get the index of the leftmost space of the ship
+    const indexOfLeftOfShip = index - ((window.shipsData[shipType].length - posOfCursor)); // get the index of the leftmost space of the ship
     const row = Math.floor(indexOfLeftOfShip / window.boardSize); // save what row ship is on
-    for (let i = window.shipsDataArray[shipType].length - 1; i >= 0; i -= 1) {
+    for (let i = window.shipsData[shipType].length - 1; i >= 0; i -= 1) {
       let spaceIndex = indexOfLeftOfShip + i;
       let yPos = spaceIndex % window.boardSize;
       try {
@@ -150,12 +149,12 @@ window.drop = function drop(ev, index, x, y) {
         window.playerArray[x][yPos] = `${shipType}`;
       } catch (error) { // if there is an error remove all ship spaces just created
         alert('You cannot place your ship there. Try again.');
-        for (let j = window.shipsDataArray[shipType].length - 1; j >= 0; j -= 1) {
+        for (let j = window.shipsData[shipType].length - 1; j >= 0; j -= 1) {
           try {
             spaceIndex = indexOfLeftOfShip + j;
             yPos = spaceIndex % window.boardSize;
             document.getElementById(`playerBoard${spaceIndex}`).style.backgroundColor = window.defaultColor;
-            window.playerArray[x][yPos] = 'false';
+            window.playerArray[x][yPos] = window.defaultStatus;
           } catch (error2) {
             return false;
           }
@@ -164,6 +163,6 @@ window.drop = function drop(ev, index, x, y) {
     }
   }
   document.getElementById(shipType).style.display = window.noDisplay; // remove the ship from the dock
-  window.shipsDataArray[shipType].isDisplayed = false;
+  window.shipsData[shipType].isDisplayed = false;
   return true;
 };

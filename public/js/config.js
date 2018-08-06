@@ -1,5 +1,7 @@
 window.boardSize = 10; // board size, normal game is 10x10
 window.spaceSize = 35; // size of one space of ship in px
+window.player2 = 2;
+window.player1 = 1;
 // defaults
 window.player1Board = Array(window.boardSize);
 window.player2Board = Array(window.boardSize);
@@ -13,16 +15,23 @@ window.defaultColor = 'lightblue';
 window.shipColor = 'grey';
 window.missColor = 'white';
 window.hitColor = 'red';
+window.defaultStatus = 'false';
+window.missStatus = 'miss';
+window.hitStatus = 'hit';
+window.setupStatus = 'setup';
+window.attackStatus = 'attack';
+window.player1Turn = "Player 1's Turn";
+//css
 window.noDisplay = 'none';
 window.block = 'block';
 window.inlineBlock = 'inline-block';
-window.player1Turn = "Player 1's Turn";
-window.player2Turn = "Player 2's Turn";
-window.player2 = 2;
-window.player1 = 1;
+// ids
+window.submitButtonId = 'submitButton';
+window.shipDockId = 'shipsDock';
+window.turnId = 'playersTurn';
 // ships
 window.shipArray = ['carrier', 'battleship', 'cruiser', 'submarine', 'destroyer'];
-window.shipsDataArray = {
+window.shipsData = {
   carrier: {
     name: 'carrier',
     isDisplayed: true,

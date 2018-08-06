@@ -7,7 +7,7 @@ Open the index.html file in your browser to play BattleShipt.
 
 Rules:
 
-Ships:
+ Ships:
   - Carrier is 5 spaces long
   - Battleship is 4 spaces long
   - Cruiser is 3 spaces long
@@ -29,6 +29,7 @@ Notes:
 
 - There is a New Game button that can be used at any time. 
 - There is text at the top saying whose turn it is.
+- If you drag the ship in between the table data boxes (the white area) it won't register.
 
 Problems:
 
