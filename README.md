@@ -14,7 +14,7 @@ Rules:
   - Submarine is 3 spaces long
   - Destroyer is 2 spaces long
 
-1. Player 1 picks their ship placement by dragging and dropping the ships. They can be placed horizontally or vertically. They can rotate the ship by clicking on it. If they want to remove a ship they can just click on one of the spaces of that ship and it will go back to the dock. The game will not let the user continue until they place all their ships. It will also not let them place a ship partially off the board. If they try it will tell them to try again. When finished they will click submit. Then it will tell them it's the next player's turn.
+1. Player 1 picks their ship placement by dragging and dropping the ships. They can be placed horizontally or vertically. They can rotate the ship by clicking on it. If they want to remove a ship they can just click on one of the spaces of that ship and it will go back to the dock. The game will not let the user continue until they place all their ships. It will also not let them place a ship partially off the board or on top of another ship. If they try it will tell them to try again. When finished they will click submit. Then it will tell them it's the next player's turn.
 2. Player 2 does the same. Submit button and dock go away after the ships are setup. 
 3. Then the game begins. The turns go as follows:
   - Player clicks on a space on the opponent board.

@@ -28,7 +28,7 @@ window.setupBoards = function setupBoards() {
       playerSpaceElement.setAttribute('id', `playerBoard${(i * window.boardSize) + j}`);
       // add the click function
       opponentSpaceElement.setAttribute('onclick', `checkIfHit(${i},${j})`);
-      playerSpaceElement.setAttribute('onclick', `removeShip(${i},${j})`);
+      playerSpaceElement.setAttribute('onclick', `removeShipByIndex(${i},${j})`);
       // add drag and drop function calls
       playerSpaceElement.setAttribute('ondragover', 'allowDrop(event)');
       playerSpaceElement.setAttribute('ondrop', `drop(event, ${(i * window.boardSize) + j}, ${i}, ${j})`);
