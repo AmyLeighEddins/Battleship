@@ -38,6 +38,8 @@ window.shipsData = {
     rotated: false,
     length: 5,
     pixels: 5 * window.spaceSize,
+    player1Location: [],
+    player2Location: []
   },
   battleship: {
     name: 'battleship',
@@ -45,6 +47,8 @@ window.shipsData = {
     rotated: false,
     length: 4,
     pixels: 4 * window.spaceSize,
+    player1Location: [],
+    player2Location: []
   },
   cruiser: {
     name: 'cruiser',
@@ -52,6 +56,8 @@ window.shipsData = {
     rotated: false,
     length: 3,
     pixels: 3 * window.spaceSize,
+    player1Location: [],
+    player2Location: []
   },
   submarine: {
     name: 'submarine',
@@ -59,6 +65,8 @@ window.shipsData = {
     rotated: false,
     length: 3,
     pixels: 3 * window.spaceSize,
+    player1Location: [],
+    player2Location: []
   },
   destroyer: {
     name: 'destroyer',
@@ -66,5 +74,7 @@ window.shipsData = {
     rotated: false,
     length: 2,
     pixels: 2 * window.spaceSize,
+    player1Location: [],
+    player2Location: []
   },
 };

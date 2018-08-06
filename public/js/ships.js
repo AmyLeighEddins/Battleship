@@ -18,18 +18,17 @@ window.removeShipByIndex = function removeShipByIndex(x, y) {
  * the space on the array and put the ship back in the dock, loop through for all spaces of this ship
  */
 window.removeShip = function removeShip(shipRemoving) {
+  // make sure game is in setup mode and the ship removing isn't 'false'
   if (window.gameStatus !== window.setupStatus || shipRemoving === window.defaultStatus) return false;
-  if (window.shipArray.includes(shipRemoving)) {
-    for (let i = 0; i < window.boardSize; i += 1) {
-      for (let j = 0; j < window.boardSize; j += 1) {
-        if (window.playerArray[i][j] === shipRemoving) {
-          const spaceElem = document.getElementById(`playerBoard${(i * window.boardSize) + j}`);
-          spaceElem.style.backgroundColor = window.defaultColor;
-          window.playerArray[i][j] = window.defaultStatus;
-        }
-      }
-    }
-  }
+  // loop through array of ship indexes to remove the ship from board and double array
+  window.shipsData[shipRemoving][`player${window.playerTurn}Location`].forEach((shipIndex) => {
+    const xPos = Math.floor(shipIndex / window.boardSize);
+    const yPos = shipIndex % window.boardSize;
+    const spaceElem = document.getElementById(`playerBoard${shipIndex}`);
+    spaceElem.style.backgroundColor = window.defaultColor;
+    window.playerArray[xPos][yPos] = window.defaultStatus;
+  });
+  window.shipsData[shipRemoving][`player${window.playerTurn}Location`] = []; // remove ship indexes from array
   window.normalizeShip(window.shipsData[shipRemoving].name);
   return true;
 };
@@ -134,8 +133,10 @@ window.drop = function drop(ev, index, x, y) {
           alert('You cannot place your ship there. Try again.');
           return false;
         }
+        // set ship
         document.getElementById(`playerBoard${spaceIndex}`).style.backgroundColor = window.shipColor;
         window.playerArray[xPos][y] = shipType;
+        window.shipsData[shipType][`player${window.playerTurn}Location`].push(spaceIndex); // add location of ship to ship data for that player
       } catch (error) { // if there is an error remove all ship spaces just created
         window.removeShip(shipType);
         alert('You cannot place your ship there. Try again.');
@@ -158,8 +159,10 @@ window.drop = function drop(ev, index, x, y) {
           alert('You cannot place your ship there. Try again.');
           return false;
         }
+        // set ship
         document.getElementById(`playerBoard${spaceIndex}`).style.backgroundColor = window.shipColor;
         window.playerArray[x][yPos] = shipType;
+        window.shipsData[shipType][`player${window.playerTurn}Location`].push(spaceIndex); // add location of ship to ship data for that player
       } catch (error) { // if there is an error remove all ship spaces just created
         window.removeShip(shipType);
         alert('You cannot place your ship there. Try again.');
