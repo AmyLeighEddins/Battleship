@@ -14,9 +14,8 @@ window.removeShipByIndex = function removeShipByIndex(x, y) {
 /**
  * @name removeShip
  * @param {String} shipRemoving first index of the associated array of space element
- * @desc set the space at the index to light blue for a ship space to show it isn't a ship space anymore
- * and set the status of the space on the array and put the ship back in the dock, loop through for all
- * spaces of this ship
+ * @desc set ship space to light blue to show it isn't a ship space anymore and set the status of
+ * the space on the array and put the ship back in the dock, loop through for all spaces of this ship
  */
 window.removeShip = function removeShip(shipRemoving) {
   if (window.gameStatus !== window.setupStatus || shipRemoving === window.defaultStatus) return false;
@@ -150,12 +149,11 @@ window.drop = function drop(ev, index, x, y) {
       let spaceIndex = indexOfLeftOfShip + i;
       let yPos = spaceIndex % window.boardSize;
       try {
-        // make sure part of ship is not put on next row and you are not putting a ship on top of another ship
-        if (Math.floor((spaceIndex) / window.boardSize) !== row) {
+        if (Math.floor((spaceIndex) / window.boardSize) !== row) { // make sure part of ship is not put on next row
           alert('You cannot place your ship there. Try again.');
           return false;
         }
-        if (window.playerArray[x][yPos] !== window.defaultStatus) {
+        if (window.playerArray[x][yPos] !== window.defaultStatus) { // make sure you're not putting a ship on top of another ship
           window.removeShip(shipType);
           alert('You cannot place your ship there. Try again.');
           return false;
