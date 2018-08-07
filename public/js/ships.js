@@ -151,6 +151,7 @@ window.drop = function drop(ev, index, x, y) {
       let yPos = spaceIndex % window.boardSize;
       try {
         if (Math.floor((spaceIndex) / window.boardSize) !== row) { // make sure part of ship is not put on next row
+          window.normalizeShip(shipType);
           alert('You cannot place your ship there. Try again.');
           return false;
         }

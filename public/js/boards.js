@@ -103,19 +103,18 @@ window.switchBoards = function switchBoards() {
  * @desc check if the player sunk a ship
  */
 window.checkIfShipSunk = function checkIfShipSunk(ship) {
-  let shipSunk = true;
   const opponentTurn = window.playerTurn === window.player1 ? window.player2 : window.player1; // set to the opponent
-  window.shipsData[ship][`player${opponentTurn}Location`].forEach((shipIndex) => { // loop through the ship data location array for the opponent
+  const shipFound = window.shipsData[ship][`player${opponentTurn}Location`].findIndex((shipIndex) => {
     const xPos = Math.floor(shipIndex / window.boardSize);
     const yPos = shipIndex % window.boardSize;
-    if (window.opponentArray[xPos][yPos] === ship) shipSunk = false;
+    return window.opponentArray[xPos][yPos] === ship;
   });
-  if (shipSunk) {
+  if (shipFound === -1) {
     alert(`You sunk their ${ship}.`);
     window.nextTurn();
-    return shipSunk;
+    return true;
   } else {
-    return shipSunk;
+    return false;
   }
 };
 
