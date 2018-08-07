@@ -73,11 +73,10 @@ window.rotateShip = function rotateShip(ship) {
  * @desc return the boolean for whether all the ships are used
  */
 window.areAllShipsUsed = function areAllShipsUsed() {
-  let allUsed = true;
-  window.shipArray.forEach((ship) => {
-    if (window.shipsData[ship].isDisplayed) allUsed = false;
+  let allUsed = window.shipArray.findIndex((ship) => {
+    return window.shipsData[ship].isDisplayed;
   });
-  return allUsed;
+  return allUsed === -1 ? true : false;
 };
 
 /**
